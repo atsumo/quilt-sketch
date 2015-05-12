@@ -1,7 +1,10 @@
 package
 {
 	import flash.display.Sprite;
+	import flash.display.StageAlign;
+	import flash.display.StageScaleMode;
 	
+	[SWF(width = "1920", height = "1200", frameRate = "30", backgroundColor = "#FFFFFF")]
 	public class Main extends Sprite
 	{
 		//色
@@ -10,23 +13,36 @@ package
 		];
 		
 		//三角形のサイズ
-		private const SIZE:int = 15;
-		
+		private const BASE_SIZE:int = 20;
+		private const SIZES:Array = [BASE_SIZE, BASE_SIZE, BASE_SIZE];
 		public function Main()
+		{
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.align = StageAlign.TOP_LEFT;
+			
+			initialize();
+		}
+		
+		private function initialize():void
 		{
 			draw();
 		}
 		
 		private function draw():void
 		{
-			
-			// TODO Auto Generated method stub
-			for (var i:int = 0; i < 100; i++) {
-				var color:uint = (Math.random() > 0.6) ? COLORS[int(COLORS.length * Math.random())] : 0xFFFFFF;
-				var triangle:Triangle = new Triangle(color, SIZE, int(Triangle.TYPES.length * Math.random()));
-				triangle.x = 15*i;
-				addChild(triangle);
-				trace('add', color);
+			var row:int = Math.floor(stage.stageWidth / BASE_SIZE);
+			var col:int = Math.floor(stage.stageHeight / BASE_SIZE);
+			for (var y:int = 0; y < col; y++) {
+				for (var x:int = 0; x < row; x++) {
+					var size:int = SIZES[int(Math.random() * SIZES.length)];
+					var color:uint = (Math.random() > 0.6) ? COLORS[int(COLORS.length * Math.random())] : 0xFFFFFF;
+					var triangle:Triangle = new Triangle(color, size, int(Triangle.TYPES.length * Math.random()));
+					triangle.x = size * x;
+					triangle.y = size * y;
+					if (color !== 0xFFFFFF)
+						addChild(triangle);
+					//trace('add', color);	
+				}
 			}
 		}
 	}
